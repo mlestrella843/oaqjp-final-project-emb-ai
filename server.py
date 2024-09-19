@@ -13,7 +13,7 @@ def render_index_page():
 def emotion_detector_server():
     ''' 
     This function receives the text from the HTML interface and performs emotion analysis 
-    using the emotion_detector function. It returns the analysis in JSON format.
+    using the emotion_detector function. It returns the analysis as plain text.
     '''
     # Retrieve the text to analyze from the request arguments
     text_to_analyze = request.args.get('textToAnalyze')
@@ -36,16 +36,14 @@ def emotion_detector_server():
     # Create the response text with the scores and dominant emotion
     result_text = (
         f"For the given statement, the system response is "
-        f"'anger': {emotions['anger']}, 'disgust': {emotions['disgust']}, "
-        f"'fear': {emotions['fear']}, 'joy': {emotions['joy']} and 'sadness': {emotions['sadness']}. "
+        f"'anger': {emotions['anger']:.9f}, 'disgust': {emotions['disgust']:.10f}, "
+        f"'fear': {emotions['fear']:.9f}, 'joy': {emotions['joy']:.7f} and 'sadness': {emotions['sadness']:.8f}. "
         f"The dominant emotion is {dominant_emotion}."
     )
 
-    # Return the response in JSON format
-    response_json = json.dumps({'result': result_text})
-
-    # Send the JSON response with status code 200 (OK)
-    return Response(response_json, mimetype='application/json')
+    # Return the response as plain text
+    return Response(result_text, mimetype='text/plain')
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5007)
+    app.run(host="0.0.0.0", port=5009)
+
